@@ -15,10 +15,15 @@ private:
     bool isIPv4;
     bool isValid;  
 
-    void validateIP() {
+    bool validateIP() {
         try {
             address::from_string(this->ipAdress.toString());
-            return true;   
+            whatVersion();
+            if(!(validatePrefix())) {
+                cerr << "Error: Prefijo no valido par la version IP" << endl;
+                return false;
+            } 
+            return true;
         } catch(const system_error &e) {
             cerr << "Error: IP no valida " << e.what() << endl;
             return false;
@@ -29,11 +34,23 @@ private:
         this->isIPv4 = ipAdress.is_v4(); 
     }
 
+    bool validatePrefix() {
+        if(this->isIPv4 && (this->prefix >= 32) && (this->prefix <= 0)) {
+            cerr << "Error: Prefijo invalido para IPv4 (1-32)" << endl;
+            return false;
+        } else if(!(isIPv4() && (this->prefix >= 128) && (this->prefix <= 0))) {
+            cerr << "Error: Prefijo invalido para IPv6 (1-128)" << endl;
+            return false;
+        }
+        return true;
+    }
+
 public:
+    // Constructor
     IPAdress(const string &ip, const short prefix) {
         setIPPrefix(ip, prefix);
     }
-
+    // Destructor por default
     ~IPAdress() = default;
 
     // Setters para IP y Prefijo
@@ -41,11 +58,13 @@ public:
         try (
             this->ipAdress = address::from_string(ip);
             // Evalua que sea un ip valida
-            this->isValid = validateIP;
+            this->isValid = validateIP();
 
             this->prefix = prefix;
             // Evalua que sea un prefijo valido
-            whatVersion();
+            if(!(this->isValid)) {
+                cerr << "Error: Configuracion de IP y prefijo no valida" << endl;
+            }
         ) catch(const system_error &e) {
             cerr << "Error al establecer IP y prefijo: " << e.what() << endl;
         }
@@ -55,19 +74,6 @@ public:
         try {
             address::from_string(pi);
             return true;
-        } catch(const system_error &e) {
-            cerr << "Error: " << e.what() << endl;
-            return false;
-        }
-    }
-
-
-
-    // Validate
-    static bool isValidIP(string &ip) {
-        try {
-            address::from_string(ip);
-            return true;   
         } catch(const system_error &e) {
             cerr << "Error: " << e.what() << endl;
             return false;
