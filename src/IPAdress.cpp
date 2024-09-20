@@ -12,18 +12,21 @@ class IPAdress {
 private:
     address ipAdress;
     unsigned short prefix;
-    bool IpVersion; // IPv4 = 0, IPv6 = 1
+    bool isIPv4;
     bool isValid;  
 
-    void isValid() {
-        isValid(this->ipAdress, this->prefix);
+    void validateIP() {
+        try {
+            address::from_string(this->ipAdress.toString());
+            return true;   
+        } catch(const system_error &e) {
+            cerr << "Error: IP no valida " << e.what() << endl;
+            return false;
+        }
     } 
 
-    void isVersion() {
-        isValidVersion(this->ipAdress, this->prefix) {
-            bool flag;
-            
-        }
+    void whatVersion() {
+        this->isIPv4 = ipAdress.is_v4(); 
     }
 
 public:
@@ -33,21 +36,29 @@ public:
 
     ~IPAdress() = default;
 
-    // Setters
-    void setIPPrefix(string &ip, const short prefix) {
-        address oldIpAdress = this->ipAdress;
-        using short oldprefix = this->prefix;
+    // Setters para IP y Prefijo
+    void setIPPrefix(const string &ip, const unsigned short prefix) {
+        try (
+            this->ipAdress = address::from_string(ip);
+            // Evalua que sea un ip valida
+            this->isValid = validateIP;
 
-        this->ipAdress = ip;
-        this->prefix = prefix;
-
-        if(!(isValid() && isVersion())) {
-            this->ipAdress;
+            this->prefix = prefix;
+            // Evalua que sea un prefijo valido
+            whatVersion();
+        ) catch(const system_error &e) {
+            cerr << "Error al establecer IP y prefijo: " << e.what() << endl;
         }
     }
 
-    static bool isValid(string &ip, const short prefix) {
-
+    static bool isValid(const string &ip) {
+        try {
+            address::from_string(pi);
+            return true;
+        } catch(const system_error &e) {
+            cerr << "Error: " << e.what() << endl;
+            return false;
+        }
     }
 
 
