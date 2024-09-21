@@ -1,5 +1,4 @@
-#ifndef IPADRESS_HPP
-#define IPADRESS_HPP
+#pragma once
 
 #include <iostream>
 #include <boost/asio.hpp>
@@ -7,9 +6,14 @@
 
 using boost::asio::ip::address;
 using std::string;
+using std::to_string;
+
+using boost::system::system_error;
+using std::cerr;
+using std::endl;
 
 class IPAddress {
-private:
+protected:
     address ipAddress;
     unsigned short prefix;
     bool isIPv4;
@@ -23,13 +27,17 @@ public:
     // Constructor
     IPAddress(const string &ip, const unsigned short prefix);
     // Destructor por defecto
-    ~IPAddress() = default;
+    virtual ~IPAddress() = default;
 
     // Setters para IP y Prefijo
     void setIPPrefix(const string &ip, const unsigned short prefix);
 
+    // Getters para IP y Prefijo
+    string getIP() const;
+    unsigned short getPrefix() const;
+
     // Método estático para validar la IP
-    static bool isValid(const string &ip);
+    static bool isValid(const string &ip) const;
 };
 
 #endif 

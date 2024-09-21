@@ -1,8 +1,4 @@
-#include "../include/IPAdress.hpp"
-
-using boost::system::system_error;
-using std::cerr;
-using std::endl;
+#include "../include/IPAddress.hpp"
 
 // Constructor
 IPAddress::IPAddress(const string &ip, const unsigned short prefix) {
@@ -40,7 +36,13 @@ bool IPAddress::validatePrefix() {
     return true;
 }
 
+string IPAddress::getIP() const {
+    return this->ipAddress.to_string();
+}
 
+unsigned short IPAddress::getPrefix() const {
+    return this->prefix;
+}
 
 // Setters para IP y Prefijo
 void IPAddress::setIPPrefix(const string &ip, const unsigned short prefix) {
@@ -60,8 +62,11 @@ void IPAddress::setIPPrefix(const string &ip, const unsigned short prefix) {
         cerr << "Error al establecer IP y prefijo: " << e.what() << endl;
     }
 }
+
+
+
 // Método estático para validar la IP
-bool IPAddress::isValid(const string &ip) {
+bool IPAddress::isValid(const string &ip) const {
     try {
         address::from_string(ip);
         return true;
