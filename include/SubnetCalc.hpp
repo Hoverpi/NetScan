@@ -24,6 +24,6 @@ public:
     SubnetCalc(const string &ip, const unsigned prefix);
     
     // 
-    void calcSubnets(unsigned int dSubnets = 0, unsigned int dHosts = 0);
+    vector<address_v4> calcSubnets(unsigned int dSubnets = 0, unsigned int dHosts = 0);
 
 };

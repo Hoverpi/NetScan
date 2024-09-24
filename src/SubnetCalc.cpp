@@ -4,7 +4,7 @@
 SubnetCalc::SubnetCalc(const string &ip, unsigned short prefix)
     : IPAddress(ip, prefix) {}
 
-void calcSubnets(unsigned int dSubnets = 0, unsigned int dHosts) {
+vector<address_v4> calcSubnets(unsigned int dSubnets = 0, unsigned int dHosts) {
     if(!(isValid(ip))) {
         cerr << "Error: Ip no valida" << endl;
         return;
@@ -14,7 +14,7 @@ void calcSubnets(unsigned int dSubnets = 0, unsigned int dHosts) {
         auto network = make_network_v4(ipAddress.to_string() + "/" + to_string(prefix));
         cout << "Network: " << network << endl;
 
-        vector<network_v4> subnets;
+        vector<address_v4> subnets;
 
         // Calcular basado en las subredes
         if(dSubnets > 0) {
@@ -60,4 +60,5 @@ void calcSubnets(unsigned int dSubnets = 0, unsigned int dHosts) {
     } catch(system_error &e) {
         cerr << "Error: IP no válida o prefijo incorrecto: " << e.what() << endl;
     }
+    return subnets;
 }
